@@ -46,6 +46,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   render?: ButtonPrimitive.Props["render"];
+  nativeButton?: boolean;
 }
 
 function Button({
@@ -55,15 +56,18 @@ function Button({
   asChild = false,
   render,
   children,
+  nativeButton,
   ...props
 }: ButtonProps) {
   const renderProp = render || (asChild && React.isValidElement(children) ? (children as React.ReactElement) : undefined);
+  const computedNativeButton = nativeButton !== undefined ? nativeButton : (renderProp ? false : undefined);
 
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       render={renderProp}
+      nativeButton={computedNativeButton}
       {...props}
     >
       {asChild ? undefined : children}
